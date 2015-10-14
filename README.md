@@ -6,7 +6,7 @@
   
 Installation
 ------------
-1) Install Laravel Collective package via composer (default Form Builder)
+1) Install Laravel Collective package via composer (HTML & Form Builder)
 ~~~~~ php
   composer require laravelcollective/html
 ~~~~~
