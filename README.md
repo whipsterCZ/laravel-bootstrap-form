@@ -45,10 +45,10 @@ Usage
 ## In blade views
 
 This extension is inspired by `https://github.com/dwightwatson/bootstrap-form`.
-  So you can use any methods from Bootstrap Form Builder
+  So you can use all its methods with same syntax
 
 ~~~~~ php
-  BootForm::text($name,$label,$value,$attr)
+  BootstrapForm::text($name,$label,$value,$attr)
 ~~~~~
 
 Or you can use new helpers.
