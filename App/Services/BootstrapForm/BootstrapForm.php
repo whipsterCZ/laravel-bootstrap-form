@@ -369,7 +369,7 @@ class BootstrapForm
 		$error = $this->getFieldError($name);
 
 		$wrapperOptions = $this->isHorizontal() ? ['class' => implode(' ', [$this->getLeftColumnOffsetClass(), $this->getRightColumnClass()])] : [];
-		$wrapperOptions['class'] .= $this->getFieldErrorClass($name,' has-error');
+		@$wrapperOptions['class'] .= $this->getFieldErrorClass($name,' has-error');
 		$wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement .$error. '</div>';
 
 		$html = $this->getFormGroup(null, $wrapperElement);
@@ -467,7 +467,7 @@ class BootstrapForm
 		$error = $this->getFieldError($name);
 
 		$wrapperOptions = $this->isHorizontal() ? ['class' => implode(' ', [$this->getLeftColumnOffsetClass(), $this->getRightColumnClass()])] : [];
-		$wrapperOptions['class'] .= $this->getFieldErrorClass($name,' has-error');
+		@$wrapperOptions['class'] .= $this->getFieldErrorClass($name,' has-error');
 		$wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement . $error .'</div>';
 
 		$html = $this->getFormGroup(null, $wrapperElement);
