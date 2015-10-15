@@ -75,6 +75,12 @@ class BootstrapForm
 	protected $errorBagShown = false;
 
 	/**
+	 *  Option for override config
+	 * @var bool
+	 */
+	protected $showErrorsInFormGroup = false;
+
+	/**
 	 * @var \Illuminate\Database\Eloquent\Model
 	 */
 	protected $model = null;
@@ -360,9 +366,11 @@ class BootstrapForm
 
 		$label = $this->getLabelTitle($label, $name, false);
 		$inputElement = $this->checkboxElement($name, $label, $value, $checked, false, $options);
+		$error = $this->getFieldError($name);
 
 		$wrapperOptions = $this->isHorizontal() ? ['class' => implode(' ', [$this->getLeftColumnOffsetClass(), $this->getRightColumnClass()])] : [];
-		$wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement . '</div>';
+		$wrapperOptions['class'] .= $this->getFieldErrorClass($name,' has-error');
+		$wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement .$error. '</div>';
 
 		$html = $this->getFormGroup(null, $wrapperElement);
 		$this->closeField();
@@ -456,9 +464,11 @@ class BootstrapForm
 
 		$label = $this->getLabelTitle($label, $name, false);
 		$inputElement = $this->radioElement($name, $label, $value, $checked, false, $options);
+		$error = $this->getFieldError($name);
 
 		$wrapperOptions = $this->isHorizontal() ? ['class' => implode(' ', [$this->getLeftColumnOffsetClass(), $this->getRightColumnClass()])] : [];
-		$wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement . '</div>';
+		$wrapperOptions['class'] .= $this->getFieldErrorClass($name,' has-error');
+		$wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement . $error .'</div>';
 
 		$html = $this->getFormGroup(null, $wrapperElement);
 		$this->closeField();
@@ -1128,7 +1138,7 @@ class BootstrapForm
 	protected function shouldDisplayErrorInFormGroup()
 	{
 		$errorsInFormGroup = $this->config->get('inspinia.show_errors_in_form_group');
-		return $errorsInFormGroup || (!$this->errorBagShown && is_null($errorsInFormGroup));
+		return $this->showErrorsInFormGroup || $errorsInFormGroup || (!$this->errorBagShown && is_null($errorsInFormGroup));
 	}
 
 	public function setTemporarylabelColumns($cols)
@@ -1145,7 +1155,7 @@ class BootstrapForm
 
 	public function setDisplayErrorsInFormGroup($enable)
 	{
-		$this->showErrorsInFormGroupshowErrorsInFormGroup = (bool)$enable;
+		$this->showErrorsInFormGroup = (bool)$enable;
 		return $this;
 	}
 
