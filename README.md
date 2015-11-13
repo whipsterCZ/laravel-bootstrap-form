@@ -13,14 +13,14 @@ Installation
 
 2) Copy source code to your existing App - directories should **match service Namespace**
 ~~~~~ php
-App/Services/BootstrapForm/
+app/Services/BootstrapForm/
 ~~~~~
 
 3) register service provider and Facade (Optional) in your **config/app.php**
 ~~~~~ php
 'providers' => [
 	...,
-	Collective\Html\HtmlServiceProvider:class,
+	Collective\Html\HtmlServiceProvider::class,
 	App\Services\BootstrapForm\ServiceProvider::class,
 ],
 'aliases' => [

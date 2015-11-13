@@ -765,9 +765,9 @@ class BootstrapForm
 	public function month($name,$label=null,$value=null,$options = []){
 		$this->useLabelAsOptions($label,$options);
 		$options = array_merge($options, ['type'=>'date']);
-		$options = array_merge($options, ['class'=>$this->config->get('inspinia.month_picker_class')]);
+		$options = array_merge($options, ['class'=>$this->config->get('bootstrapForm.month_picker_class')]);
 		if ( null === $format = array_pull($options,'format')) {
-			$format = $this->config->get('inspinia.month_format');
+			$format = $this->config->get('bootstrapForm.month_format');
 		}
 		$value = $this->getFormattedDateValue($name,$value,$format);
 		//append date format to the form data
@@ -786,10 +786,10 @@ class BootstrapForm
 	public function date($name,$label=null,$value=null,$options = []){
 		$this->useLabelAsOptions($label,$options);
 		$options = array_merge($options, ['type'=>'date']);
-		$options = array_merge($options, ['class'=>$this->config->get('inspinia.date_picker_class')]);
+		$options = array_merge($options, ['class'=>$this->config->get('bootstrapForm.date_picker_class')]);
 
 		if ( null === $format = array_pull($options,'format')) {
-			$format = $this->config->get('inspinia.date_format');
+			$format = $this->config->get('bootstrapForm.date_format');
 		}
 
 		$value = $this->getFormattedDateValue($name,$value,$format);
@@ -827,8 +827,8 @@ class BootstrapForm
 		if (Str::contains($label, '_')) {
 			$label = str_replace("_", " ", $label);
 		}
-		if ($addPostfix && !Str::contains($label, $this->config->get('inspinia.label_postfix'))) {
-			$label .= $this->config->get('inspinia.label_postfix');
+		if ($addPostfix && !Str::contains($label, $this->config->get('bootstrapForm.label_postfix'))) {
+			$label .= $this->config->get('bootstrapForm.label_postfix');
 		}
 		return Str::title($label);
 	}
@@ -934,7 +934,7 @@ class BootstrapForm
 	 */
 	public function getType()
 	{
-		return isset($this->type) ? $this->type : $this->config->get('inspinia.type');
+		return isset($this->type) ? $this->type : $this->config->get('bootstrapForm.type');
 	}
 
 	/**
@@ -966,7 +966,7 @@ class BootstrapForm
 	 */
 	public function getLeftColumnClass()
 	{
-		$class = $this->leftColumnClass ?: $this->config->get('inspinia.left_column_class');
+		$class = $this->leftColumnClass ?: $this->config->get('bootstrapForm.left_column_class');
 		if ($this->tempLeftColumns) {
 			$classes = explode(' ',$class);
 			$newClasses = [];
@@ -986,7 +986,7 @@ class BootstrapForm
 	 */
 	public function getRightColumnClass()
 	{
-		$class = $this->rightColumnClass ?: $this->config->get('inspinia.right_column_class');
+		$class = $this->rightColumnClass ?: $this->config->get('bootstrapForm.right_column_class');
 		if ($this->tempRightColumns) {
 			$classes = explode(' ',$class);
 			$newClasses = [];
@@ -1017,7 +1017,7 @@ class BootstrapForm
 	 */
 	public function getLeftColumnOffsetClass()
 	{
-		$class = $this->leftColumnOffsetClass ?: $this->config->get('inspinia.left_column_offset_class');
+		$class = $this->leftColumnOffsetClass ?: $this->config->get('bootstrapForm.left_column_offset_class');
 		if ($this->tempLeftColumns) {
 			$classes = explode(' ',$class);
 			$newClasses = [];
@@ -1077,7 +1077,7 @@ class BootstrapForm
 			return null;
 		}
 		if ($this->getErrors()) {
-			$allErrors = $this->config->get('inspinia.show_all_errors');
+			$allErrors = $this->config->get('bootstrapForm.show_all_errors');
 
 			if ($allErrors) {
 				return implode('', $this->getErrors()->get($field, $format));
@@ -1137,7 +1137,7 @@ class BootstrapForm
 
 	protected function shouldDisplayErrorInFormGroup()
 	{
-		$errorsInFormGroup = $this->config->get('inspinia.show_errors_in_form_group');
+		$errorsInFormGroup = $this->config->get('bootstrapForm.show_errors_in_form_group');
 		return $this->showErrorsInFormGroup || $errorsInFormGroup || (!$this->errorBagShown && is_null($errorsInFormGroup));
 	}
 
