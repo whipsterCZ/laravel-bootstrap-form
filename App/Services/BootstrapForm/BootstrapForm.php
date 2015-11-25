@@ -1130,7 +1130,7 @@ class BootstrapForm
 		$errorHtml = '';
 		if ($this->getErrors()) {
 //			$errorBag = new ViewErrorBag($this->getErrors());
-			$errorHtml = \View::make('inspinia::errors')->render();
+			$errorHtml = \View::make('bootstrap::errors')->render();
 		}
 		return sprintf('<div id="%s">%s</div>', $containerHtmlId, $errorHtml);
 	}
