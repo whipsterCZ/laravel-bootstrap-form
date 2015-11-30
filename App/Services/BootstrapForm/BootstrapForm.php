@@ -87,6 +87,8 @@ class BootstrapForm
 
 	protected $fieldId = null;
 
+	protected $errorBag = 'default';
+
 
 	/**
 	 * Construct the class.
@@ -141,6 +143,10 @@ class BootstrapForm
 			'left_column_offset_class',
 			'right_column_class'
 		]);
+
+		if ( $errorBag = array_pull($options,'errorBag') ) {
+			$this->errorBag = $errorBag;
+		}
 
 		if (array_key_exists('show_errors_in_form_group', $options)) {
 			$this->setDisplayErrorsInFormGroup((bool)$options['show_errors_in_form_group']);
@@ -1060,7 +1066,11 @@ class BootstrapForm
 	 */
 	protected function getErrors()
 	{
-		return $this->form->getSessionStore()->get('errors');
+		$errors = $this->form->getSessionStore()->get('errors');
+		if ( $errors ) {
+			return $errors->getBag($this->errorBag);
+		}
+		return null;
 	}
 
 	/**
@@ -1130,7 +1140,7 @@ class BootstrapForm
 		$errorHtml = '';
 		if ($this->getErrors()) {
 //			$errorBag = new ViewErrorBag($this->getErrors());
-			$errorHtml = \View::make('bootstrap::errors')->render();
+			$errorHtml = \View::make('bootstrap::errors')->with('errorBag',$this->errorBag)->render();
 		}
 		return sprintf('<div id="%s">%s</div>', $containerHtmlId, $errorHtml);
 	}

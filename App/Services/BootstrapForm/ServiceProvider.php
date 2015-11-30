@@ -14,10 +14,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->loadViewsFrom(__DIR__.'/views', 'bootstrap');
 
         $this->publishes([
-            __DIR__.'/views' => base_path('resources/views/bootstrap'),
-        ],'public');
-
-        $this->publishes([
             __DIR__.'/config.php' => config_path('bootstrapForm.php')
         ], 'config');
     }
