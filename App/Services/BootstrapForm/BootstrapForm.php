@@ -823,6 +823,9 @@ class BootstrapForm
 		if (!empty($label)) {
 			return $label;
 		}
+		if($label===false) {
+			return $label; //false means no label
+		}
 		$label = $label ?: $name;
 		if (Str::contains($label, '[]')) {
 			$label = str_replace("[]", "", $label);
