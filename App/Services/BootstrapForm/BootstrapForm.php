@@ -778,7 +778,11 @@ class BootstrapForm
 		$value = $this->getFormattedDateValue($name,$value,$format);
 		//append date format to the form data
 		$formatName = $name;
-		if( $formatName[strlen($formatName)-1] == "]" ) $formatName = substr($formatName,0,strlen($formatName)-1). "_format]";
+		if( $formatName[strlen($formatName)-1] == "]" ) {
+			$formatName = substr($formatName,0,strlen($formatName)-1). "_format]";
+		} else {
+			$formatName .= "_format";
+		}
 		$formatFields = $this->hidden($formatName,$format);
 		return $formatFields . $this->text($name,$label,$value,$options);
 	}
@@ -803,7 +807,11 @@ class BootstrapForm
 		$value = $this->getFormattedDateValue($name,$value,$format);
 		//append date format to the form data
 		$formatName = $name;
-		if( $formatName[strlen($formatName)-1] == "]" ) $formatName = substr($formatName,0,strlen($formatName)-1). "_format]";
+		if( $formatName[strlen($formatName)-1] == "]" ) {
+			$formatName = substr($formatName,0,strlen($formatName)-1). "_format]";
+		} else {
+			$formatName .= "_format";
+		}
 		$formatFields = $this->hidden($formatName,$format);
 		return $formatFields . $this->text($name,$label,$value,$options);
 	}
