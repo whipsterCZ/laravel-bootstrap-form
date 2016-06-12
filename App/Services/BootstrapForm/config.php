@@ -10,11 +10,22 @@ return [
 	|--------------------------------------------------------------------------
 	|
 	| Here you may specify the default form type for the open method. You have
-	| the options of Type::HORIZONTAL, Type::VERTICAL and Type::INLINE.
+	| the options of FormType::HORIZONTAL, FormType::VERTICAL and FormType::INLINE.
 	|
 	*/
 
 	'type' => FormType::HORIZONTAL,
+
+	/*
+	|--------------------------------------------------------------------------
+	| Bootstrap version
+	|--------------------------------------------------------------------------
+	|
+	| Here you can specify Bootstrap CSS Version
+	| the options of FormType::VERSION_3 (default) and FormType::VERSION_4
+	|
+	*/
+	'version' => FormType::VERSION_3,
 
 	/*
 	|--------------------------------------------------------------------------

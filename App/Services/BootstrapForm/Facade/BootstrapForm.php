@@ -1,6 +1,6 @@
 <?php
 /**
- * Author: whipstercz
+ *  @author: Daniel Kouba
  */
 
 namespace App\Services\BootstrapForm\Facade;

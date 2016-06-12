@@ -3,6 +3,7 @@
   - Provides useful tools for working with Bootstrap CSS Forms and Laravel
   - inspired by Bootstrap-Form package
   - Form Builder accessible through `BootstrapForm` facade.
+  - Support Bootstrap both 3 & 4
   
 Installation
 ------------
@@ -65,14 +66,20 @@ BootstrapForm::open([
     'model' => $client,
     'update' => 'client.update',    //route name
     'store' => 'client.store',      //route name
+    
     //AJAXify form - @see https://github.com/whipsterCZ/laravel-ajax
     'ajax' => false,
+    
     //optional @see configuration/bootstrapForm.php
-        'left_column_class' => 'col-md-2',
-        'right_column_class' => 'col-md-10',
-        'left_column_offset_class'=> 'col-md-offset-2',
+    'left_column_class' => 'col-md-2',
+    'right_column_class' => 'col-md-10',
+    'left_column_offset_class'=> 'col-md-offset-2',
+    
     //optional -  checks if errorBag is shown
     'show_errors_in_form_group' => false,
+    
+    //optional - default is 3
+    'version' => 3
     'files' => true //default=false
 ]);
 

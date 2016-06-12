@@ -1,6 +1,6 @@
 <?php
 /**
- * author: whipstercz
+ * author: Daniel Kouba, whipstercz
  */
 
 namespace App\Services\BootstrapForm;
@@ -42,6 +42,12 @@ class BootstrapForm
 	 * @var string
 	 */
 	protected $type;
+
+	/**
+	 * Version of Bootstrap CSS
+	 * @var int
+	 */
+	protected $version = FormType::VERSION_3;
 
 	/**
 	 * Bootstrap form left column class.
@@ -136,6 +142,12 @@ class BootstrapForm
 
 		if (array_key_exists('right_column_class', $options)) {
 			$this->setRightColumnClass($options['right_column_class']);
+		}
+
+		if (array_key_exists('version',$options)) {
+			$this->setVersion($options['version']);
+		} else {
+			$this->setVersion( $this->config->get('bootstrapForm.version',$this->version) );
 		}
 
 		array_forget($options, [
@@ -375,7 +387,7 @@ class BootstrapForm
 		$error = $this->getFieldError($name);
 
 		$wrapperOptions = $this->isHorizontal() ? ['class' => implode(' ', [$this->getLeftColumnOffsetClass(), $this->getRightColumnClass()])] : [];
-		@$wrapperOptions['class'] .= $this->getFieldErrorClass($name,' has-error');
+		@$wrapperOptions['class'] .= $this->getFieldErrorClass($name,' '.$this->getErrorClass());
 		$wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement .$error. '</div>';
 
 		$html = $this->getFormGroup(null, $wrapperElement);
@@ -406,7 +418,7 @@ class BootstrapForm
 		$options['id'] = $this->fieldId;
 
 		$inputElement = $this->form->checkbox($name, $value, $checked, $options);
-		$labelElement = '<label ' . $this->html->attributes($labelOptions) . '>' . $inputElement . $label . '</label>';
+		$labelElement = '<label ' . $this->html->attributes($labelOptions) . '>' . $inputElement . " ". $label . '</label>';
 
 		return $inline ? $labelElement : '<div class="checkbox">' . $labelElement . '</div>';
 	}
@@ -895,7 +907,7 @@ class BootstrapForm
 	 */
 	protected function getFormGroupOptions($name = null, array $options = [])
 	{
-		$class = 'form-group';
+		$class = $this->version >= 4 && $this->isHorizontal() ? 'form-group row'  : 'form-group';
 
 		if ($name) {
 			$class .= ' ' . $this->getFieldErrorClass($name);
@@ -940,7 +952,7 @@ class BootstrapForm
 	 */
 	protected function getLabelOptions(array $options = [])
 	{
-		$class = 'control-label';
+		$class = $this->version >=4 ?  'form-control-label' : 'control-label';
 		if ($this->isHorizontal()) {
 			$class .= ' ' . $this->getLeftColumnClass();
 		}
@@ -978,6 +990,24 @@ class BootstrapForm
 	{
 		$this->type = $type;
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getVersion()
+	{
+		return $this->version;
+	}
+
+	/**
+	 * Available versions are FormType::VERSION_3 and FormType::VERSION_4
+	 * @param int $version
+	 */
+	public function setVersion($version)
+	{
+		$this->version = $version;
+	}
+
 
 
 	/**
@@ -1121,8 +1151,11 @@ class BootstrapForm
 	 * @param  string $class
 	 * @return string
 	 */
-	protected function getFieldErrorClass($field, $class = 'has-error')
+	protected function getFieldErrorClass($field, $class = null)
 	{
+		if(!isset($class)) {
+			$class = $this->getErrorClass();
+		}
 		//translate notation  name[0] => name.0
 		if (strpos($field,"[") >= 0 ) {
 			$chunks = explode('[',$field);
@@ -1135,6 +1168,12 @@ class BootstrapForm
 		$hasErrors = $this->getErrors() && $this->getErrors()->first($field);
 		return $hasErrors ? $class : null;
 	}
+
+	protected function getErrorClass()
+	{
+		return $this->version >= 4 ? 'has-danger' : 'has-error';
+	}
+
 
 	/**
 	 * if label is_array use it as $options
