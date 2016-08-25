@@ -28,7 +28,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/config.php', 'bootstrapForm');
 
-        $this->app->bindShared('bootstrapForm', function($app) {
+        $this->app->singelton('bootstrapForm', function($app) {
             return new BootstrapForm($app['html'], $app['form'], $app['config']);
         });
     }
