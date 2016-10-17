@@ -73,14 +73,18 @@ return [
 	'label_postfix' => ":",
 
 
-	/*
-	|--------------------------------------------------------------------------
-	| Date support in InspiniaForm
-	|--------------------------------------------------------------------------
-	 */
-	'date_format' => "d/m/Y",
-	'month_format' => "Y-m",
-	'date_picker_class' => 'date-picker',
-	'month_picker_class' => 'month-picker',
+    /*
+    |--------------------------------------------------------------------------
+    | Date support in InspiniaForm
+    |--------------------------------------------------------------------------
+    |
+    | if need change date formats, don't forget to update config of javascript datePicker Component
+    |
+    |--------------------------------------------------------------------------
+     */
+    'date_format' => 'd/m/Y',
+    'month_format' => 'Y-m',
+    'date_picker_class' => 'date-picker',
+    'month_picker_class' => 'month-picker',
 
 ];
