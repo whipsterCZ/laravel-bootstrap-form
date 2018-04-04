@@ -357,7 +357,7 @@ class BootstrapForm
 	 * @return string
 	 */
 	public function checkboxBool($name, $label = null, $checked = null, array $options = []) {
-		$hiddenElement = $this->form->hidden($name,0);
+		$hiddenElement = sprintf('<input name="%s" type="hidden" value="0">', $name );
 		$element = $this->checkbox($name,$label,1,$checked,$options);
 		return $hiddenElement.$element;
 	}
