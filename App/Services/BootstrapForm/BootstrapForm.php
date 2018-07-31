@@ -9,9 +9,8 @@ use Collective\Html\FormBuilder;
 use Collective\Html\HtmlBuilder;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 
 class BootstrapForm
 {
@@ -357,7 +356,7 @@ class BootstrapForm
 	 * @return string
 	 */
 	public function checkboxBool($name, $label = null, $checked = null, array $options = []) {
-		$hiddenElement = sprintf('<input name="%s" type="hidden" value="0">', $name );
+        $hiddenElement = sprintf('<input name="%s" type="hidden" value="0">', $name );
 		$element = $this->checkbox($name,$label,1,$checked,$options);
 		return $hiddenElement.$element;
 	}
@@ -378,9 +377,14 @@ class BootstrapForm
 
 		//Opening Field - do not set for in label
 		$this->fieldId = $this->getInputHtmlId($name,$options);
-		if ($labelCols = (int)array_pull($options, 'label_cols')) {
+		if (null != ($labelCols = (int)array_pull($options, 'label_cols'))) {
 			$this->setTemporarylabelColumns($labelCols);
 		}
+        if($this->version >= 4) {
+		    $errorClass = 	!$this->isFieldValid($name) ? ' is-invalid' : '';
+            @$options['class'] .= ( $this->isFieldValid($name) ? ' _is-valid' : ' is-invalid' );
+        }
+
 
 		$label = $this->getLabelTitle($label, $name, false);
 		$inputElement = $this->checkboxElement($name, $label, $value, $checked, false, $options);
@@ -750,7 +754,7 @@ class BootstrapForm
 
 		$options = $this->getFieldOptions($name, $options);
 
-		$inputElement = $this->form->select($name, $list, $selected, $options);
+        $inputElement = $this->form->select($name, $list, $selected, $options);
 
 		$wrapperOptions = $this->isHorizontal() ? ['class' => $this->getRightColumnClass()] : [];
 		$wrapperElement = '<div' . $this->html->attributes($wrapperOptions) . '>' . $inputElement . $this->getFieldError($name) . '</div>';
@@ -926,6 +930,15 @@ class BootstrapForm
 	protected function getFieldOptions($name, array $options = [])
 	{
 		$options['class'] = trim('form-control ' . $this->getFieldOptionsClass($options));
+        if($this->version >= 4) {
+            $isValid = $this->isFieldValid($name);
+            $submitted = !$this->form->oldInputIsEmpty();
+            if($submitted) {
+                $options['class'] .= $isValid ? ' _is-valid' : ' is-invalid';
+            }
+
+        }
+
 		if (!isset($options['id'])) {
 			$options['id'] = $this->fieldId ?: $this->getInputHtmlId($name,$options);
 		}
@@ -1126,8 +1139,14 @@ class BootstrapForm
 	 * @param  string $format
 	 * @return mixed
 	 */
-	protected function getFieldError($field, $format = '<span class="help-block">:message</span>')
+	protected function getFieldError($field, $format = 'auto')
 	{
+	    $format3 =  '<span class="help-block">:message</span>';
+	    $format4 = '<div class="invalid-feedback">:message</div>';
+	    if($format=='auto') {
+	        $format = $this->version>=4 ? $format4 : $format3;
+        }
+
 		if (!$this->shouldDisplayErrorInFormGroup()) {
 			return null;
 		}
@@ -1156,18 +1175,21 @@ class BootstrapForm
 		if(!isset($class)) {
 			$class = $this->getErrorClass();
 		}
-		//translate notation  name[0] => name.0
-		if (strpos($field,"[") >= 0 ) {
-			$chunks = explode('[',$field);
-			array_walk($chunks,function(&$value,$key){
-				$value = str_replace(']','',$value);
-			});
-			$field = implode('.',$chunks);
-		}
-
-		$hasErrors = $this->getErrors() && $this->getErrors()->first($field);
-		return $hasErrors ? $class : null;
+		return $this->isFieldValid($field) ? null : $class;
 	}
+
+	protected function isFieldValid($field) {
+        //translate notation  name[0] => name.0
+        if (strpos($field,"[") >= 0 ) {
+            $chunks = explode('[',$field);
+            array_walk($chunks,function(&$value,$key){
+                $value = str_replace(']','',$value);
+            });
+            $field = implode('.',$chunks);
+        }
+	    $hasErrors = $this->getErrors() && $this->getErrors()->first($field);
+        return !$hasErrors;
+    }
 
 	protected function getErrorClass()
 	{
@@ -1196,7 +1218,7 @@ class BootstrapForm
 //			$errorBag = new ViewErrorBag($this->getErrors());
 			$errorHtml = \View::make('bootstrap::errors')->with('errorBag',$this->errorBag)->render();
 		}
-		return sprintf('<div id="%s">%s</div>', $containerHtmlId, $errorHtml);
+		return sprintf('<div id="%s" class="error-bag">%s</div>', $containerHtmlId, $errorHtml);
 	}
 
 	protected function shouldDisplayErrorInFormGroup()
@@ -1242,5 +1264,12 @@ class BootstrapForm
 	protected function endsWith($haystack, $needle) {
 		// search forward starting from end minus needle length characters
 		return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
+	}
+
+    public function locale($locale = null){
+        if(is_null($locale)) {
+            $locale = app()->getLocale();
+        }
+        return $this->hidden('locale',$locale);
 	}
 }
